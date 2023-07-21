@@ -3,6 +3,7 @@
     let ips
     let loading = "Esperando"
     let fetch = false
+    let show_offline = true
 
     async function api(){
         let ramal = parseInt(document.getElementById("ramal").value)
@@ -13,6 +14,12 @@
         console.log(ips)
         loading = "Pronto"
         fetch = true
+        let checkbox = document.getElementById("ip_show").checked
+        console.log(checkbox)
+    }
+
+    function setIpShow(){
+        show_offline = !show_offline
     }
 </script>
 
@@ -34,7 +41,12 @@
                     <option value="3">Imagem</option>
                     <option value="4">JFL's</option>
                     <option value="5">Dispositivos</option>
+                    <option value="0">C. Acesso</option>
                 </select>
+            </div>
+            <div class="ip_show ml-6 flex items-center">
+                <input on:change={setIpShow} id="ip_show" type="checkbox" class="mr-1" checked>
+                <span>Mostrar ip's offline</span>
             </div>
             <div class="submit flex items-center">
                 <button on:click={api} class="bg-blue-500 hover:bg-blue-600 text-white w-20 h-full rounded-xl font-bold" id="btn_ping">PING</button>
@@ -49,9 +61,11 @@
                                 {ip[0]}
                             </span>
                         {:else}
-                            <span class="bg-red-500 hover:bg-red-400 w-full text-xl p-2 text-center rounded-b-lg">
-                                {ip[0]}
-                            </span>
+                            {#if show_offline}
+                                <span class="bg-red-500 hover:bg-red-400 w-full text-xl p-2 text-center rounded-b-lg">
+                                    {ip[0]}
+                                </span>
+                            {/if}
                         {/if}
                         {:else}
                         {#if ip[1] == true}
@@ -59,9 +73,11 @@
                                 {ip[0]}
                             </span>
                             {:else}
-                            <span class="bg-red-500 hover:bg-red-400 w-full text-xl p-2 text-center">
-                                {ip[0]}
-                            </span>
+                            {#if show_offline}
+                                <span class="bg-red-500 hover:bg-red-400 w-full text-xl p-2 text-center">
+                                    {ip[0]}
+                                </span>
+                            {/if}
                         {/if}
                     {/if}
                 {/each}
@@ -89,4 +105,8 @@
         max-width: 800px;
     }
 
+    .table {
+        max-height: 50vmin;
+        overflow-y: auto;
+    }
 </style>
